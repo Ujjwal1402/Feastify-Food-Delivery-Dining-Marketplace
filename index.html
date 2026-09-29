@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feastify — Food Delivery & Dining Marketplace</title>
+    <meta name="description" content="Feastify is a production-grade food delivery, restaurant discovery, table reservation, and kitchen operations platform." />
+    <meta property="og:title" content="Feastify — Food Delivery & Dining Marketplace" />
+    <meta property="og:description" content="Feastify is a production-grade food delivery, restaurant discovery, table reservation, and kitchen operations platform." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function () {
+        var origDebug = console.debug;
+        var origError = console.error;
+        console.debug = function () {
+          if (arguments[0] && String(arguments[0]).indexOf('[vite]') !== -1) return;
+          return origDebug.apply(console, arguments);
+        };
+        console.error = function () {
+          if (arguments[0] && String(arguments[0]).indexOf('[vite]') !== -1) return;
+          return origError.apply(console, arguments);
+        };
+        window.addEventListener('unhandledrejection', function (event) {
+          if (event && event.reason && String(event.reason).indexOf('WebSocket') !== -1) {
+            event.preventDefault();
+          }
+        });
+        var NativeWebSocket = window.WebSocket;
+        if (NativeWebSocket) {
+          var WrappedWebSocket = function (url, protocols) {
+            var protoStr = protocols ? String(protocols) : '';
+            if (protoStr.indexOf('vite') !== -1) {
+              var dummy = new EventTarget();
+              dummy.url = url;
+              dummy.readyState = 1;
+              dummy.protocol = protoStr;
+              dummy.extensions = '';
+              dummy.bufferedAmount = 0;
+              dummy.binaryType = 'blob';
+              dummy.send = function () {};
+              dummy.close = function () {
+                dummy.readyState = 3;
+              };
+              setTimeout(function () {
+                var openEvt = new Event('open');
+                if (typeof dummy.onopen === 'function') dummy.onopen(openEvt);
+                dummy.dispatchEvent(openEvt);
+                var msgEvt = new MessageEvent('message', {
+                  data: JSON.stringify({ type: 'connected' }),
+                });
+                if (typeof dummy.onmessage === 'function') dummy.onmessage(msgEvt);
+                dummy.dispatchEvent(msgEvt);
+              }, 0);
+              return dummy;
+            }
+            return protocols !== undefined
+              ? new NativeWebSocket(url, protocols)
+              : new NativeWebSocket(url);
+          };
+          WrappedWebSocket.prototype = NativeWebSocket.prototype;
+          WrappedWebSocket.CONNECTING = 0;
+          WrappedWebSocket.OPEN = 1;
+          WrappedWebSocket.CLOSING = 2;
+          WrappedWebSocket.CLOSED = 3;
+          window.WebSocket = WrappedWebSocket;
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-[#FAF9F6] text-stone-900 antialiased selection:bg-[#E23744]/15 selection:text-[#E23744]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

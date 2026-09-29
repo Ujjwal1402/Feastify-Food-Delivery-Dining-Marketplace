@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  zestora-platform:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - zestora_db_data:/app/database/storage
+    restart: unless-stopped
+
+volumes:
+  zestora_db_data:

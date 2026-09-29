@@ -1,0 +1,18 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: zestora-marketplace
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/project-id/zestora-marketplace:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1Gi

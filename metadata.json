@@ -1,0 +1,6 @@
+{
+  "name": "Feastify — Food Delivery & Dining Marketplace",
+  "description": "Feastify is a production-grade food delivery, restaurant discovery, table reservation, and kitchen operations platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
